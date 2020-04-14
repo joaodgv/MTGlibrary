@@ -25,10 +25,10 @@ class Database:
 		db = self.db
 		try:
 			if (card.name in self.db["cards"]):
-				db["cards"][card.name]["number"] += 1
+				db["cards"][card.name]["number"] += int(card.n)
 			else:
-				db["cards"][card.name] = {"name": card.name, "color": card.color, "cost": card.cost, "number": card.n, "type": card.type, "deck": card.deck,  "obs": card.obs}
-				db["n_cards"] += 1
+				db["cards"][card.name] = {"name": card.name, "color": card.color, "cost": card.cost, "number": int(card.n), "type": card.type, "deck": [card.deck],  "obs": card.obs}
+				db["n_cards"] += int(card.n)
 
 			self.update_db()
 		except DataEntering:
@@ -61,28 +61,48 @@ class Database:
 			self.db["decks"].pop(name)
 
 	#function that adds a card to a deck
-	def add_card_to_deck(self, deck, name):
+	def add_card_to_deck(self, deck, name, num):
+		n = int(num)
 		for d in self.db["decks"]:
 			if(deck == d):
 				card = self. search_by_name(name)
-				print(card)
-				if(card != None):
-					if(card[0]["type"] == "land"):
-						self.db["decks"][d]["land"][name] = card[0]
-					elif(card[0]["type"] == "creature"):
-						self.db["decks"][d]["land"][name] = card[0]
-					else:
-						self.db["decks"][d]["spell"][name] = card[0]
+				if(card != None and name not in self.db["decks"][d]["land"] and name not in self.db["decks"][d]["creature"] and name not in self.db["decks"][d]["spell"]):
+					lcard = card[0]
+					lcard["number"] = n
 
+					if(card[0]["type"] == "land"):
+						self.db["decks"][d]["land"][lcard["name"]] = lcard
+					elif(card[0]["type"] == "creature"):
+						self.db["decks"][d]["land"][lcard["name"]] = lcard
+					else:
+						self.db["decks"][d]["spell"][lcard["name"]] = lcard
+
+					print(d)
+
+					if(d not in self.db["cards"][lcard["name"]]["deck"]):
+						self.db["cards"][lcard["name"]]["deck"].append(d)
+				else:
+					lcard = card[0]
+					if(card[0]["type"] == "land"):
+						self.db["decks"][d]["land"][lcard["name"]]["number"] += n
+					elif(card[0]["type"] == "creature"):
+						self.db["decks"][d]["land"][lcard["name"]]["number"] += n
+					else:
+						self.db["decks"][d]["spell"][lcard["name"]]["number"] += n
 		self.update_db()
 
 	#function that removes a card from a deck
-	def remove_card_from_deck(self, deck, name):
+	def remove_card_from_deck(self, deck, name, nnum):
+		n = int(num)
 		for d in self.db["decks"]:
 			if(deck == d):
-				for c in d:
-					if(c == name):
-						self.db["decks"][d].pop(c)
+				for t in self.db["decks"][d]:
+					for c in self.db["decks"][d][t]:
+						if(c == name and  self.db["decks"][d][t][c]["number"] >= n):
+							 self.db["decks"][d][t][c]["number"] -= n
+						else:
+							self.db["decks"][d][t].pop(c)
+							self.db["cards"][name]["deck"].pop(deck)
 
 		self.update_db()
 

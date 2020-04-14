@@ -4,15 +4,31 @@
             "name": "mountain",
             "color": "red",
             "cost": "0",
-            "number": "2",
+            "number": 5,
             "type": "land",
-            "deck": "",
+            "deck": [
+                "",
+                "a"
+            ],
             "obs": ""
         }
     },
     "decks": {
         "a": {
-            "land": {},
+            "land": {
+                "mountain": {
+                    "name": "mountain",
+                    "color": "red",
+                    "cost": "0",
+                    "number": 3,
+                    "type": "land",
+                    "deck": [
+                        "",
+                        "a"
+                    ],
+                    "obs": ""
+                }
+            },
             "creature": {},
             "spell": {},
             "side": {},
@@ -20,5 +36,5 @@
             "n_side": 0
         }
     },
-    "n_cards": 1
+    "n_cards": 2
 }

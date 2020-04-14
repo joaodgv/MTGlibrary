@@ -17,7 +17,9 @@ class Search:
 		print("n - Search by name")
 		print("t - search by type")
 		print("c - search by cost ")
+		print("ld - list current deck")
 		print("ad - add card to selected deck")
+		print("rd - remove a card from the selected deck")
 		print("b - back to the main screen")
 
 	#------------------------------------------------
@@ -25,8 +27,13 @@ class Search:
 	#-----------------------------------------------
 
 	def print_list(self, cards):
+		print("name | color | cost | decks")
 		for i in cards:
-			print("{} | {} | {}".format(i["name"], i["color"], i["cost"]))
+			string = "{} | {} | {} | ".format(i["name"], i["color"], i["cost"])
+			for j in i["deck"]:
+				string = string +"{} ".format(j)
+
+			print(string)
 
 	#Function that gets the list of cards with that name
 	def search_by_name(self, db):
@@ -59,9 +66,10 @@ class Search:
 	def add_to_deck(self, db, deck):
 		print("What is the name of the card that you want to add to the deck?")
 		card = input("card: ")
+		n = input("number of cards to add: ")
 
 		if(deck[0] != ""):
-			db.add_card_to_deck(deck[0], card)
+			db.add_card_to_deck(deck[0], card, n)
 		else:
 			print("you have no deck selected")
 
@@ -73,7 +81,8 @@ class Search:
 		if(deck):
 			print("What is the name of the card you want to remove")
 			name = input("name: ")
-			db.remove_card_from_deck(deck, name);
+			n = input("number of cards to remove: ")
+			db.remove_card_from_deck(deck, name, n);
 		else:
 			print("you have no deck selected")
 
@@ -88,6 +97,7 @@ class Search:
 		self.print_info()
 
 		while(True):
+			print("Make an action")
 			c = input()
 
 			if(c == "n"):
@@ -99,6 +109,9 @@ class Search:
 			elif(c == "c"):
 				#searches by cost
 				self.search_by_cost(db)
+			elif(c == "ld"):
+				#Lists the cards in the current deck
+				continue
 			elif(c == "ad"):
 				#adds a card to a deck
 				self.add_to_deck(db, deck)
