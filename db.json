@@ -1,0 +1,24 @@
+{
+    "cards": {
+        "mountain": {
+            "name": "mountain",
+            "color": "red",
+            "cost": "0",
+            "number": "2",
+            "type": "land",
+            "deck": "",
+            "obs": ""
+        }
+    },
+    "decks": {
+        "a": {
+            "land": {},
+            "creature": {},
+            "spell": {},
+            "side": {},
+            "n_cards": 0,
+            "n_side": 0
+        }
+    },
+    "n_cards": 1
+}

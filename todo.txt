@@ -1,0 +1,14 @@
+Todo:
+	fix the add card to deck:
+		-currently adds the whole card as is and we need to create a new instance of it
+		-it doesn't update the master card that is in a new deck
+
+	add the feature remove card from deck:
+		-currently there is no way in the menu to do that
+		-the function probably has errors in the way it acesses the dictionary
+
+	add a column that showns in which deck the card is
+		-currently we dont print that information
+		
+	design and create the graphical user interface
+		-currently only the terminal works and with bugs
