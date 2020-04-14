@@ -1,5 +1,3 @@
-#READ THIS
-
 ## Ways to use the program
 
 ### Terminal
