@@ -2,14 +2,14 @@
 
 ## Ways to use the program
 
-###Terminal
+### Terminal
 To run the program in the terminal you just have to run the python script console
 
 ```bash
 python3 console.py
 ```
 
-###Executable file
+### Executable file
 still has to be done
 
 ## Database system
