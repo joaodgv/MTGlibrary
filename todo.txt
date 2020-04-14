@@ -5,5 +5,14 @@ Todo:
 	create a menu option to update a card
 		-currently there is no way to do that
 
+	create a menu option that adds cards to side deck
+		-currently there is no way to do that
+
+	create a deck manager menu
+		-the user should be allowed to change cards from one place to the other
+
+	make the ability to comment the deck
+		-It would be good if the user could give a description of the deck
+	
 	design and create the graphical user interface
 		-currently only the terminal works

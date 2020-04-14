@@ -4,11 +4,12 @@
             "name": "mountain",
             "color": "red",
             "cost": "0",
-            "number": 5,
+            "number": 4,
             "type": "land",
             "deck": [
                 "",
-                "a"
+                "a",
+                "commander"
             ],
             "obs": ""
         }
@@ -25,6 +26,28 @@
                     "deck": [
                         "",
                         "a"
+                    ],
+                    "obs": ""
+                }
+            },
+            "creature": {},
+            "spell": {},
+            "side": {},
+            "n_cards": 0,
+            "n_side": 0
+        },
+        "commander": {
+            "land": {
+                "mountain": {
+                    "name": "mountain",
+                    "color": "red",
+                    "cost": "0",
+                    "number": 4,
+                    "type": "land",
+                    "deck": [
+                        "",
+                        "a",
+                        "commander"
                     ],
                     "obs": ""
                 }
