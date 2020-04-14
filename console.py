@@ -59,9 +59,11 @@ def choose_a_deck():
 def add_deck():
 	print("To create a deck just give it a name")
 	name = input("name: ")
+	print("You can give a description of the deck if you want")
+	desc = input("desc")
 
 	if(name):
-		db.add_deck(name)
+		db.add_deck(name, desc)
 	else:
 		print("The name cannot be empty")
 

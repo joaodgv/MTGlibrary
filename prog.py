@@ -7,10 +7,9 @@ import back as B
 #Startting the window
 window = Tk()
 window.geometry("800x800")
-window.title = "Magic Card Storage Program"
+window.title = "Magic The Gathering Storage Program"
+window.resizable(0, 0)
 
 #code for the window
-lbl = Label(window, text="hello")
-lbl.grid(row=0, column=0)
 
 window.mainloop()
