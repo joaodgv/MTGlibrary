@@ -1,7 +1,7 @@
 ## Ways to use the program
 
 ### Terminal
-To run the program in the terminal you just have to run the python script console
+To run the program in the terminal you just have to run the python script console.py that is located inside the source folder
 
 ```bash
 python3 console.py
