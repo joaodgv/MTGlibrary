@@ -72,6 +72,15 @@ class Search:
 			db.add_card_to_deck(deck[0], card, n)
 		else:
 			print("you have no deck selected")
+	def add_to_deck(self, db, deck):
+		print("What is the name of the card that you want to add to the side deck?")
+		card = input("card: ")
+		n = input("number of cards to add: ")
+
+		if(deck[0] != ""):
+			db.add_card_to_deck(deck[0], card, n, True)
+		else:
+			print("you have no deck selected")
 
 	def get_all_cards(self, db):
 		card = db.get_all_cards()
@@ -109,12 +118,12 @@ class Search:
 			elif(c == "c"):
 				#searches by cost
 				self.search_by_cost(db)
-			elif(c == "ld"):
-				#Lists the cards in the current deck
-				continue
 			elif(c == "ad"):
 				#adds a card to a deck
 				self.add_to_deck(db, deck)
+			elif(c == "asd"):
+				#adds a card to the side deck
+				self.add_to_side_deck(db, deck)
 			elif(c == "rd"):
 				#removes card from deck
 				self.remove_card_from_deck(db, deck)
