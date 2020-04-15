@@ -36,7 +36,7 @@ class Database:
 			print("There was an error addin your card")
 
 	#Function that removes a card from the db
-	def remove_card(self, name, n):)
+	def remove_card(self, name, n):
 		if (name in self.db["cards"]):
 			self.db["cards"].pop(name)
 		self.db["n_cards"] -= 1
@@ -80,7 +80,7 @@ class Database:
 					else:
 						self.db["decks"][d]["spell"][lcard["name"]] = lcard
 
-					if(!side):
+					if(not side):
 						self.db["decks"][d]["n_cards"] += n
 					else:
 						self.db["decks"][d]["n_side"] += n
@@ -97,7 +97,7 @@ class Database:
 					else:
 						self.db["decks"][d]["spell"][lcard["name"]]["number"] += n
 
-					if(!side):
+					if(not side):
 						self.db["decks"][d]["n_cards"] += n
 					else:
 						self.db["decks"][d]["n_side"] += n
@@ -113,12 +113,12 @@ class Database:
 					for c in self.db["decks"][d][t]:
 						if(c == name and  self.db["decks"][d][t][c]["number"] >= n):
 							self.db["decks"][d][t][c]["number"] -= n
-							if(!side):
+							if(not side):
 								self.db["decks"][d]["n_cards"] -= n
 							else:
 								self.db["decks"][d]["n_side"] -= n
 						else:
-							if(!side):
+							if(not side):
 								self.db["decks"][d]["n_cards"] -= self["decks"][d]["number"]
 							else:
 								self.db["decks"][d]["n_side"] -= self["decks"][d]["number"]
