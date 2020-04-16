@@ -10,6 +10,17 @@
                 "test"
             ],
             "obs": ""
+        },
+        "island": {
+            "name": "island",
+            "color": ",blue",
+            "cost": 0,
+            "number": 3,
+            "type": "land",
+            "deck": [
+                ""
+            ],
+            "obs": "comment\n"
         }
     },
     "decks": {
@@ -36,5 +47,5 @@
             "n_side": 2
         }
     },
-    "n_cards": 2
+    "n_cards": 5
 }
