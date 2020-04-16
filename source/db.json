@@ -4,16 +4,37 @@
             "name": "mountain",
             "color": "red",
             "cost": "0",
-            "number": 4,
+            "number": 2,
             "type": "land",
             "deck": [
-                "",
-                "a",
-                "commander"
+                "test"
             ],
             "obs": ""
         }
     },
-    "decks": {},
+    "decks": {
+        "test": {
+            "name": "test",
+            "land": {},
+            "creature": {},
+            "spell": {},
+            "side": {
+                "mountain": {
+                    "name": "mountain",
+                    "color": "red",
+                    "cost": "0",
+                    "number": 2,
+                    "type": "land",
+                    "deck": [
+                        "test"
+                    ],
+                    "obs": ""
+                }
+            },
+            "desc": "this is a test",
+            "n_cards": 0,
+            "n_side": 2
+        }
+    },
     "n_cards": 2
 }

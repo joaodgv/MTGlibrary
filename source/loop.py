@@ -68,17 +68,17 @@ class Search:
 		card = input("card: ")
 		n = input("number of cards to add: ")
 
-		if(deck[0] != ""):
-			db.add_card_to_deck(deck[0], card, n)
+		if(deck != ""):
+			db.add_card_to_deck(deck, card, n)
 		else:
 			print("you have no deck selected")
-	def add_to_deck(self, db, deck):
+	def add_to_side_deck(self, db, deck):
 		print("What is the name of the card that you want to add to the side deck?")
 		card = input("card: ")
 		n = input("number of cards to add: ")
 
-		if(deck[0] != ""):
-			db.add_card_to_deck(deck[0], card, n, True)
+		if(deck != ""):
+			db.add_card_to_deck(deck, card, n, True)
 		else:
 			print("you have no deck selected")
 

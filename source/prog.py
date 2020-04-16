@@ -51,6 +51,36 @@ def create_layout_list_all(lall, db):
 
 		tree.insert("", END, values=(i["name"], i["color"], i["cost"], i["number"], i["type"], decks))
 
+def create_deck_layout(ldeck, db):
+	#-----------------------------------------------------------------
+	#				Creating the List decks page
+	#------------------------------------------------------------------
+	tree = Treeview(ldeck, show="tree headings", height=34)
+	tree["columns"]=("name", "number", "numberside", "obs")
+	tree.column("#0", width=0, stretch=NO)
+	tree.column("name", width=100, stretch=NO)
+	tree.column("number",width=50, stretch=NO)
+	tree.column("numberside",width=50, stretch=NO)
+	tree.column("obs",width=355, stretch=NO)
+	tree.heading("name", text="name")
+	tree.heading("number", text="cards")
+	tree.heading("numberside", text="side")
+	tree.heading("obs", text="comment")
+	tree.grid(row=0, column=0, rowspan=4, padx=30, pady=30)
+	b1 = Button(ldeck, text="Add Deck",  bg="lightgrey", width=13, height=5)
+	b1.grid(row=0, column=2, padx=10)
+	b2 = Button(ldeck, text="Remove Deck", bg="lightgrey", width=13, height=5)
+	b2.grid(row=1, column=2, padx=10)
+	b3 = Button(ldeck, text="See Deck", bg="lightgrey", width=13, height=5)
+	b3.grid(row=2, column=2, padx=10)
+	b4 = Button(ldeck, text="Choose Deck", bg="lightgrey", width=13, height=5)
+	b4.grid(row=3, column=2, padx=10)
+
+	decks = db.get_all_decks()
+
+	for i in decks:
+		tree.insert("", END, values=(i["name"], i["n_cards"], i["n_side"], i["desc"]))
+
 
 #Starting the tkinter app
 app = Tk()
@@ -64,26 +94,29 @@ current_deck = ""
 
 #Declaring the frames
 lall = Frame(app, height=800, width=800)
+ldeck = Frame(app, height=800, width=800)
 
 #positioning the frames
-lall.pack(fill = BOTH, ipadx=0, ipady=0)
+lall.grid(row=0, column=0, ipadx=0, ipady=0, sticky='news')
+ldeck.grid(row=0, column=0, ipadx=0, ipady=0, sticky='news')
 
 #populating the frames
 create_layout_list_all(lall, db)
+create_deck_layout(ldeck, db)
 
 #Implementing the navbar
 menubar = Menu(app, font=10)
 library = Menu(menubar, font=5, tearoff=0)
-library.add_command(label="Add card", command=lambda:changeFrame(add))
+library.add_command(label="Add card", command=lambda:changeFrame())
 library.add_command(label="Remove card", command=donothing)
 library.add_command(label="Update card", command=donothing)
 library.add_separator()
 library.add_command(label="Search card", command=donothing)
-library.add_command(label="List all cards", command=donothing)
+library.add_command(label="List all cards", command=lambda:changeFrame(lall))
 deck = Menu(menubar, font=5, tearoff=0)
 deck.add_command(label="Add Deck", command=donothing)
 deck.add_command(label="Remove Deck", command=donothing)
-deck.add_command(label="List Decks", command=donothing)
+deck.add_command(label="List Decks", command=lambda:changeFrame(ldeck))
 helpmenu = Menu(menubar, font=5, tearoff=0)
 helpmenu.add_command(label="about", command=donothing)
 

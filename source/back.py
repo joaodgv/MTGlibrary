@@ -53,7 +53,7 @@ class Database:
 		if(name in self.db["decks"]):
 			print("Deck is already in the database")
 		else:
-			self.db["decks"][name] = {"land":{}, "creature": {}, "spell":{}, "side": {}, "desc": desc,  "n_cards": 0, "n_side": 0}
+			self.db["decks"][name] = {"name": name,"land":{}, "creature": {}, "spell":{}, "side": {}, "desc": desc,  "n_cards": 0, "n_side": 0}
 			self.update_db()
 
 	#function that removes a deck from the db
@@ -174,7 +174,7 @@ class Database:
 	def get_all_decks(self):
 		decks = []
 		for deck in self.db["decks"]:
-			decks.append(deck)
+			decks.append(self.db["decks"][deck])
 		return decks
 
 	def get_number_of_cards(self):
