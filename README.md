@@ -1,3 +1,5 @@
+[latest version](https://github.com/joaodgv/MTGlibrary/releases/latest)
+
 ## Ways to use the program
 
 ### Terminal
