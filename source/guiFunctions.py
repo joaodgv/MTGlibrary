@@ -3,6 +3,8 @@ from tkinter import *
 from tkinter.ttk import Treeview
 from cards import *
 
+current_deck = ""
+
 def destroy(window):
 	window.destroy()
 
@@ -283,3 +285,10 @@ def update_card(up, db, name, new, value):
 		print("Error updating card")
 
 	up.destroy()
+
+def add_to_deck(app, db, value):
+	if(current_deck):
+		if(value['values'] != ''):
+			deck = Toplevel(app)
+			deck.title('Add to Deck')
+			deck.resizable(0,0)

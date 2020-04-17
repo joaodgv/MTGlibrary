@@ -29,7 +29,7 @@ ldeck.grid(row=0, column=0, ipadx=0, ipady=0, sticky='news')
 
 #populating the frames
 create_deck_layout(app, ldeck, db)
-create_layout_list_all(app, lall, db, current_deck)
+create_layout_list_all(app, lall, db)
 
 #Implementing the navbar
 menubar = Menu(app, font=10)
@@ -39,7 +39,7 @@ library.add_command(label="Remove card", command=lambda:remove_card_layout(app, 
 library.add_command(label="Update card", command=lambda:update_card_layout(app, db, {'values':''}))
 library.add_separator()
 library.add_command(label="Search card", command=donothing)
-library.add_command(label="List all cards", command=lambda:create_layout_list_all(app, lall, db, current_deck))
+library.add_command(label="List all cards", command=lambda:create_layout_list_all(app, lall, db))
 deck = Menu(menubar, font=5, tearoff=0)
 deck.add_command(label="Add Deck", command=donothing)
 deck.add_command(label="Remove Deck", command=donothing)
