@@ -239,24 +239,44 @@ def update_card_layout(app, db, option):
 		lentry = Entry(up)
 		lentry.pack(padx=5,pady=20)
 	else:
-		x = 0
+		up = Toplevel(app)
+		up.title('Update Card')
+		up.resizable(0,0)
+		radio = Frame(up)
+		radio.pack(pady=10, side="top")
+		label = Label(up, text="Card to update: {}".format(option['values'][0]))
+		label.pack(side='top')
+		bottom = Frame(up)
+		bottom.pack(side="bottom")
+		b1 = Button(bottom, text="Update", command=lambda:update_card(up, db, option['values'][0], lentry.get(), var.get()))
+		b1.pack(padx=10,side="left")
+		b2 = Button(bottom, text="cancel", command=lambda:destroy(up))
+		b2.pack(padx=10,side="right")
+		lchoice = Label(radio, text="Category to update")
+		lchoice.pack(side="top")
+		rcost = Radiobutton(radio, text="Cost", variable=var, value=1)
+		rcost.pack(pady=10, side="left")
+		rcolor = Radiobutton(radio, text="color", variable=var, value=2)
+		rcolor.pack(side="left")
+		rnumber = Radiobutton(radio, text="number", variable=var, value=3)
+		rnumber.pack(side="left")
+		robs = Radiobutton(radio, text="Comment", variable=var, value=4)
+		robs.pack(side="left")
+		lvalue = Label(up, text="New Value")
+		lvalue.pack(padx=5,pady=20)
+		lentry = Entry(up)
+		lentry.pack(padx=5,pady=20)
 
 def update_card(up, db, name, new, value):
-	card = db.get_card(name)
-	
 	try:
 		if(value==1):
-			card["cost"] = int(new)
-			db.update_card(card)
+			db.update_cost(name, int(new))
 		elif(value==2):
-			card["color"] = new
-			db.update_card(card)
+			db.update_color(name, new)
 		elif(value==3):
-			card["number"] = int(new)
-			db.update_card(card)
+			db.update_number(name, int(new))
 		elif(value==4):
-			card["comment"] = new
-			db.update_card(card)
+			db.update_obs(name, new)
 		else:
 			raise Exception("no button was selected")
 	except Exception:

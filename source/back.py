@@ -64,6 +64,23 @@ class Database:
 			self.db["cards"][card[name]] = {"name": card["name"], "color": card["color"], "cost": card["cost"], "number": card["number"], "type": card["type"], "deck": card["deck"],  "obs": card["obs"]}
 		self.update_db()
 
+	def update_cost(self, name, cost):
+		self.db["cards"][name]["cost"] = cost
+		self.update_db()
+	
+	def update_color(self, name, color):
+		self.db["cards"][name]["color"] = color
+		self.update_db()
+	
+	def update_number(self, name, number):
+		self.db["cards"][name]["number"] = number
+		self.update_db()
+	
+	def update_obs(self, name, obs):
+		self.db["cards"][name]["obs"] = obs
+		self.update_db()
+	
+
 	#function that adds a deck to the db
 	def add_deck(self, name, desc):
 		if(name in self.db["decks"]):

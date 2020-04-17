@@ -25,8 +25,8 @@
         "mountain": {
             "name": "mountain",
             "color": "red",
-            "cost": 1,
-            "number": 2,
+            "cost": 0,
+            "number": 7,
             "type": "land",
             "deck": [
                 "test"
