@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter.ttk import Treeview
 from cards import *
 
-current_deck = ""
+local_current_deck = ""
 
 def destroy(window):
 	window.destroy()
@@ -11,7 +11,11 @@ def destroy(window):
 def create_layout_list_all(app, lall, db, current_deck):
 	#-----------------------------------------------------------------
 	#				Creating the List all page
-	#------------------------------------------------------------------
+	#------------------------------------------------------------------\
+	global local_current_deck
+
+	local_current_deck = current_deck
+
 	tree = Treeview(lall, show="tree headings", height=34)
 	tree["columns"]=("name", "color", "cost", "number", "type", "decks")
 	tree.column("#0", width=0, stretch=NO)
@@ -34,7 +38,7 @@ def create_layout_list_all(app, lall, db, current_deck):
 	b2.grid(row=1, column=2, padx=10)
 	b3 = Button(lall, text="Update card", bg="lightgrey", width=13, height=5, command=lambda:update_card_layout(app, db, tree.item(tree.focus())))
 	b3.grid(row=2, column=2, padx=10)
-	b4 = Button(lall, text="Add to Deck", bg="lightgrey", width=13, height=5)
+	b4 = Button(lall, text="Add to Deck", bg="lightgrey", width=13, height=5, command=lambda:add_to_deck_layout(app, db, tree.item(tree.focus())))
 	b4.grid(row=3, column=2, padx=10)
 	label = Label(lall, text="Current Selected deck: {}".format(current_deck))
 	label.grid(row=4, column=0)
@@ -286,9 +290,67 @@ def update_card(up, db, name, new, value):
 
 	up.destroy()
 
-def add_to_deck(app, db, value):
-	if(current_deck):
+def add_to_deck_layout(app, db, value):
+	var = IntVar()
+
+	if(local_current_deck):
 		if(value['values'] != ''):
 			deck = Toplevel(app)
 			deck.title('Add to Deck')
 			deck.resizable(0,0)
+			lab = Label(deck, text="Add card {} to deck: {}".format(value['values'][0], local_current_deck))
+			lab.place()
+			label = Label(deck, text="Number of cards to add")
+			label.pack(padx=10)
+			lentry = Entry(deck)
+			lentry.pack(padx=10) 
+			bottom = Frame(deck)
+			radio = Frame(deck)
+			radio.pack(pady=20)
+			main = Radiobutton(radio, text="main", variable=var, value=0)
+			main.pack(pady=10, side="left")
+			side = Radiobutton(radio, text="side", variable=var, value=1)
+			side.pack(side="left")
+			bottom.pack(side="bottom")
+			b1 = Button(bottom, text="Add", command=lambda:add_to_deck(db, deck, value['values'][0], int(lentry.get()), var.get()))
+			b1.pack(padx=10,side="left")
+			b2 = Button(bottom, text="Cancel", command=lambda:destroy(deck))
+			b2.pack(padx=10,side="right")
+		else:
+			deck = Toplevel(app, height=200, width=200)
+			deck.title('Add to Deck')
+			deck.resizable(0,0)
+			lab = Label(deck, text="Name of the card to add to {}".format(local_current_deck))
+			lab.pack(padx=10, pady=10)
+			nentry = Entry(deck)
+			nentry.pack(padx=10)
+			label = Label(deck, text="Number of cards to add")
+			label.pack(padx=10)
+			lentry = Entry(deck)
+			lentry.pack(padx=10)
+			radio = Frame(deck)
+			radio.pack(pady=20)
+			main = Radiobutton(radio, text="main", variable=var, value=0)
+			main.pack(pady=10, side="left")
+			side = Radiobutton(radio, text="side", variable=var, value=1)
+			side.pack(side="left")
+			bottom = Frame(deck)
+			bottom.pack(pady=20, side="bottom")
+			b1 = Button(bottom, text="Add", command=lambda:add_to_deck(db, deck, nentry.get(), int(lentry.get()), var.get()))
+			b1.pack(padx=10,side="left")
+			b2 = Button(bottom, text="Cancel", command=lambda:destroy(deck))
+			b2.pack(padx=10,side="right")
+	else:
+		#error message saying that there is no deck selected
+		x=0
+
+def add_to_deck(db, deck, name, n , var):
+	if(var==0):		
+		side = False
+	else:
+		side = True
+
+	db.add_card_to_deck(local_current_deck, name, n, side)
+
+	deck.destroy()
+

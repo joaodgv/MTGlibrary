@@ -17,7 +17,7 @@ app.title("Magic The Gathering Storage Program")
 app.resizable(0, 0)
 
 db = Database()
-current_deck = ""
+current_deck = "test"
 
 #Declaring the frames
 lall = Frame(app, height=800, width=800)
@@ -29,7 +29,7 @@ ldeck.grid(row=0, column=0, ipadx=0, ipady=0, sticky='news')
 
 #populating the frames
 create_deck_layout(app, ldeck, db)
-create_layout_list_all(app, lall, db)
+create_layout_list_all(app, lall, db, current_deck)
 
 #Implementing the navbar
 menubar = Menu(app, font=10)
@@ -39,7 +39,7 @@ library.add_command(label="Remove card", command=lambda:remove_card_layout(app, 
 library.add_command(label="Update card", command=lambda:update_card_layout(app, db, {'values':''}))
 library.add_separator()
 library.add_command(label="Search card", command=donothing)
-library.add_command(label="List all cards", command=lambda:create_layout_list_all(app, lall, db))
+library.add_command(label="List all cards", command=lambda:create_layout_list_all(app, lall, db, current_deck))
 deck = Menu(menubar, font=5, tearoff=0)
 deck.add_command(label="Add Deck", command=donothing)
 deck.add_command(label="Remove Deck", command=donothing)

@@ -4,59 +4,77 @@
             "name": "island",
             "color": ",blue",
             "cost": 0,
-            "number": 3,
+            "number": 2,
             "type": "land",
-            "deck": [
-                ""
-            ],
+            "deck": [],
             "obs": "comment\n"
         },
         "forest": {
             "name": "forest",
             "color": ",green",
             "cost": 0,
-            "number": 5,
+            "number": 2,
             "type": "land",
-            "deck": [
-                ""
-            ],
+            "deck": [],
             "obs": "\n"
         },
         "mountain": {
             "name": "mountain",
             "color": "red",
             "cost": 0,
-            "number": 7,
+            "number": 2,
             "type": "land",
-            "deck": [
-                "test"
-            ],
+            "deck": [],
             "obs": "\n"
         }
     },
     "decks": {
         "test": {
             "name": "test",
-            "land": {},
-            "creature": {},
-            "spell": {},
+            "main": {
+                "mountain": {
+                    "name": "mountain",
+                    "color": "red",
+                    "cost": 0,
+                    "number": 2,
+                    "type": "land",
+                    "deck": [],
+                    "obs": "\n"
+                },
+                "forest": {
+                    "name": "forest",
+                    "color": ",green",
+                    "cost": 0,
+                    "number": 2,
+                    "type": "land",
+                    "deck": [],
+                    "obs": "\n"
+                },
+                "island": {
+                    "name": "island",
+                    "color": ",blue",
+                    "cost": 0,
+                    "number": 1,
+                    "type": "land",
+                    "deck": [],
+                    "obs": "comment\n"
+                }
+            },
             "side": {
                 "mountain": {
                     "name": "mountain",
                     "color": "red",
-                    "cost": "0",
-                    "number": 2,
+                    "cost": 0,
+                    "number": 1,
                     "type": "land",
-                    "deck": [
-                        "test"
-                    ],
-                    "obs": ""
+                    "deck": [],
+                    "obs": "\n"
                 }
             },
             "desc": "this is a test",
-            "n_cards": 0,
-            "n_side": 2
+            "n_cards": 5,
+            "n_side": 1
         }
     },
-    "n_cards": 16
+    "n_cards": 6
 }
