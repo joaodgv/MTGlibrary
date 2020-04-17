@@ -26,26 +26,42 @@ class Database:
 		try:
 			if (card.name in self.db["cards"]):
 				db["cards"][card.name]["number"] += int(card.n)
-				db["cards"][card.name]["n_cards"] += int(card.n)
+				
+				if(card.deck not in db["cards"][card.name]["deck"] and self.get_deck(card.deck)!= None):
+					db["cards"][card.name]["deck"].append(card.deck)
+				elif(self.get_deck(card.deck)== None and card.deck != ""):
+					raise Exception()
+
+				db["n_cards"] += int(card.n)
 			else:
 				db["cards"][card.name] = {"name": card.name, "color": card.color, "cost": card.cost, "number": int(card.n), "type": card.type, "deck": [card.deck],  "obs": card.obs}
 				db["n_cards"] += int(card.n)
 
 			self.update_db()
 		except DataEntering:
-			print("There was an error addin your card")
+			print("There was an error adding your card")
 
 	#Function that removes a card from the db
 	def remove_card(self, name, n):
 		if (name in self.db["cards"]):
-			self.db["cards"].pop(name)
-		self.db["n_cards"] -= 1
+			if(n >= self.db["cards"][name]["number"]):
+				self.db["cards"].pop(name)
+			else:
+				self.db["cards"][name]["number"] -= n
+		self.db["n_cards"] -= n
 		self.update_db()
+
+	#returns a card
+	def get_card(self, name):
+		try:
+			return self.db["cards"][name]
+		except:
+			print("There is no card with that name")
 
 	#Function that updates a card information
 	def update_card(self, card):
-		if(card.name in self.db["cards"]):
-			self.db["cards"][card.name] = {"name": card.name, "color": card.color, "cost": card.cost, "type": card.type, "deck": card.deck,  "obs": card.obs}
+		if(card["name"] in self.db["cards"]):
+			self.db["cards"][card[name]] = {"name": card["name"], "color": card["color"], "cost": card["cost"], "number": card["number"], "type": card["type"], "deck": card["deck"],  "obs": card["obs"]}
 		self.update_db()
 
 	#function that adds a deck to the db
