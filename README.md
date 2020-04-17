@@ -1,4 +1,4 @@
-(https://github.com/joaodgv/MTGlibrary/archive/v0.2.0.zip)
+[Latest Release](https://github.com/joaodgv/MTGlibrary/releases/latest)
 
 ## Ways to use the program
 
