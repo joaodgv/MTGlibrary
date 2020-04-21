@@ -7,6 +7,7 @@ from cards import *
 
 local_current_deck = ""
 
+
 def destroy(window):
 	window.destroy()
 
@@ -30,18 +31,20 @@ def create_layout_list_all(app, lall, db, current_deck):
 	tree.heading("number", text="number")
 	tree.heading("type", text="type")
 	tree.heading("decks", text="decks")
-	tree.grid(row=0, column=0, rowspan=4, padx=30, pady=30)
+	tree.grid(row=0, column=0, rowspan=5, padx=30, pady=30)
 
-	b1 = Button(lall, text="Add Card",  bg="lightgrey", width=13, height=5, command=lambda:create_add_card_layout(app, db))
+	b1 = Button(lall, text="Add Card",  bg="lightgrey", width=16, height=5, command=lambda:create_add_card_layout(app, db))
 	b1.grid(row=0, column=2, padx=10)
-	b2 = Button(lall, text="Remove Card", bg="lightgrey", width=13, height=5, command=lambda:remove_card_layout(app, db, tree.item(tree.focus())))
+	b2 = Button(lall, text="Remove Card", bg="lightgrey", width=16, height=5, command=lambda:remove_card_layout(app, db, tree.item(tree.focus())))
 	b2.grid(row=1, column=2, padx=10)
-	b3 = Button(lall, text="Update card", bg="lightgrey", width=13, height=5, command=lambda:update_card_layout(app, db, tree.item(tree.focus())))
+	b3 = Button(lall, text="Update card", bg="lightgrey", width=16, height=5, command=lambda:update_card_layout(app, db, tree.item(tree.focus())))
 	b3.grid(row=2, column=2, padx=10)
-	b4 = Button(lall, text="Add to Deck", bg="lightgrey", width=13, height=5, command=lambda:add_to_deck_layout(app, db, tree.item(tree.focus())))
+	b4 = Button(lall, text="Add to Deck", bg="lightgrey", width=16, height=5, command=lambda:add_to_deck_layout(app, db, tree.item(tree.focus())))
 	b4.grid(row=3, column=2, padx=10)
-	label = Label(lall, text="Current Selected deck: {}".format(current_deck))
-	label.grid(row=4, column=0)
+	b5 = Button(lall, text="Remove from Deck", bg="lightgrey", width=16, height=5, command=lambda:remove_card_deck(app, db, tree.item(tree.focus())))
+	b5.grid(row=4, column=2, padx=10)
+	label = Label(lall, text="Current Selected deck: {}".format(local_current_deck))
+	label.grid(row=5, column=0)
 
 	cards = db.get_all_cards()
 	for i in cards:
@@ -302,6 +305,17 @@ def update_card(up, db, name, new, value):
 			db.update_obs(name, new)
 		else:
 			raise Exception("no button was selected")
+
+		tree.delete(*tree.get_children())
+		cards = db.get_all_cards()
+		for i in cards:
+			decks = ""
+			for j in i["deck"]:
+				if(j):
+					decks = "{}|{}".format(decks, j)
+
+			tree.insert("", END, values=(i["name"], i["color"], i["cost"], i["number"], i["type"], decks))
+
 	except Exception:
 		print("Error updating card")
 
@@ -410,9 +424,6 @@ def update_list(search, db, var, entry):
 	elif var == 1:
 		tree.delete(*tree.get_children())
 		cards = db.search_by_type(entry)
-
-		print(cards)
-
 		for i in cards:
 			decks = ""
 			for j in i["deck"]:
@@ -514,3 +525,68 @@ def see_deck(app, db,  value):
 					tree.insert("", END, values=(deck[j][i]["name"], deck[j][i]["color"], deck[j][i]["cost"], deck[j][i]["number"], deck[j][i]["type"], j))
 	else:
 		messagebox.showinfo("Error", "No deck is selected")
+
+def remove_card_deck(app, db, value):
+	var = IntVar()
+
+	if(local_current_deck):
+		if(value['values'] != ''):
+			deck = Toplevel(app)
+			deck.title('Remove from Deck')
+			deck.resizable(0,0)
+			lab = Label(deck, text="Remove card {} from deck: {}".format(value['values'][0], local_current_deck))
+			lab.place()
+			label = Label(deck, text="Number of cards to remove")
+			label.pack(padx=10)
+			lentry = Entry(deck)
+			lentry.pack(padx=10) 
+			bottom = Frame(deck)
+			radio = Frame(deck)
+			radio.pack(pady=20)
+			main = Radiobutton(radio, text="main", variable=var, value=0)
+			main.pack(pady=10, side="left")
+			side = Radiobutton(radio, text="side", variable=var, value=1)
+			side.pack(side="left")
+			bottom.pack(side="bottom")
+			b1 = Button(bottom, text="Remove", command=lambda:remove_card_from_deck(db, deck, value['values'][0], int(lentry.get()), var.get()))
+			b1.pack(padx=10,side="left")
+			b2 = Button(bottom, text="Cancel", command=lambda:destroy(deck))
+			b2.pack(padx=10,side="right")
+		else:
+			deck = Toplevel(app, height=200, width=200)
+			deck.title('Remove from Deck')
+			deck.resizable(0,0)
+			lab = Label(deck, text="Name of the card to remove from {}".format(local_current_deck))
+			lab.pack(padx=10, pady=10)
+			nentry = Entry(deck)
+			nentry.pack(padx=10)
+			label = Label(deck, text="Number of cards to remove")
+			label.pack(padx=10)
+			lentry = Entry(deck)
+			lentry.pack(padx=10)
+			radio = Frame(deck)
+			radio.pack(pady=20)
+			main = Radiobutton(radio, text="main", variable=var, value=0)
+			main.pack(pady=10, side="left")
+			side = Radiobutton(radio, text="side", variable=var, value=1)
+			side.pack(side="left")
+			bottom = Frame(deck)
+			bottom.pack(pady=20, side="bottom")
+			b1 = Button(bottom, text="Remove", command=lambda:remove_card_from_deck(db, deck, nentry.get(), int(lentry.get()), var.get()))
+			b1.pack(padx=10,side="left")
+			b2 = Button(bottom, text="Cancel", command=lambda:destroy(deck))
+			b2.pack(padx=10,side="right")
+	else:
+		messagebox.showinfo("Error", "There is no Deck currently selected")
+
+def remove_card_from_deck(db, deck, name, n , var):
+	if(var==0):		
+		side = False
+	else:
+		side = True
+	try:
+		db.remove_card_from_deck(local_current_deck, name, n, side)
+	except:
+		messagebox.showinfo("Error", "Something went wrong")
+
+	deck.destroy()

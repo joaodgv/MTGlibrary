@@ -37,6 +37,9 @@ class Database:
 				db["cards"][card.name] = {"name": card.name, "color": card.color, "cost": card.cost, "number": int(card.n), "type": card.type, "deck": [card.deck],  "obs": card.obs}
 				db["n_cards"] += int(card.n)
 
+			if(card.deck != ''):
+				self.add_card_to_deck(card.name)
+
 			self.update_db()
 		except DataEntering:
 			print("There was an error adding your card")
@@ -46,6 +49,7 @@ class Database:
 		if (name in self.db["cards"]):
 			if(n >= self.db["cards"][name]["number"]):
 				self.db["cards"].pop(name)
+				self.remove_card_from_deck(self, name, n)
 			else:
 				self.db["cards"][name]["number"] -= n
 		self.db["n_cards"] -= n
@@ -120,6 +124,9 @@ class Database:
 						lcard['number'] = num
 						self.db['decks'][d]['main'][card['name']] = lcard
 						self.db['decks'][d]["n_cards"] += num
+				
+				if(d not in card['deck']):
+					self.db[card.name]['deck'].append(d)
 
 		self.update_db()
 
@@ -129,20 +136,21 @@ class Database:
 		for d in self.db["decks"]:
 			if(deck == d):
 				for t in self.db["decks"][d]:
-					for c in self.db["decks"][d][t]:
-						if(c == name and self.db["decks"][d][t][c]["number"] >= n):
-							self.db["decks"][d][t][c]["number"] -= n
-							if(not side):
-								self.db["decks"][d]["n_cards"] -= n
+					if t == 'main' or t == 'side':
+						for c in self.db["decks"][d][t]:
+							if(c == name and self.db["decks"][d][t][c]["number"] >= n):
+								self.db["decks"][d][t][c]["number"] -= n
+								if(not side):
+									self.db["decks"][d]["n_cards"] -= n
+								else:
+									self.db["decks"][d]["n_side"] -= n
 							else:
-								self.db["decks"][d]["n_side"] -= n
-						else:
-							if(not side):
-								self.db["decks"][d]["n_cards"] -= self["decks"][d]["number"]
-							else:
-								self.db["decks"][d]["n_side"] -= self["decks"][d]["number"]
-							self.db["decks"][d][t].pop(c)
-							self.db["cards"][name]["deck"].pop(deck)
+								if(not side):
+									self.db["decks"][d]["n_cards"] -= self["decks"][d]["number"]
+								else:
+									self.db["decks"][d]["n_side"] -= self["decks"][d]["number"]
+								self.db["decks"][d][t].pop(c)
+								self.db["cards"][name]["deck"].pop(deck)
 
 		self.update_db()
 
@@ -156,9 +164,10 @@ class Database:
 
 	#query functions that  search the database
 	def search_by_name(self, name):
+		names = []
 		for n in self.db["cards"]:
 			if(name in n):
-				return [self.db["cards"][n]]
+				return names.append(self.db["cards"][n])
 		else:
 			return None
 
