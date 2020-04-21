@@ -17,7 +17,7 @@ app.title("Magic The Gathering Storage Program")
 app.resizable(0, 0)
 
 db = Database()
-current_deck = "test"
+current_deck = ""
 
 #Declaring the frames
 lall = Frame(app, height=800, width=800)

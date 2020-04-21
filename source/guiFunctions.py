@@ -12,10 +12,6 @@ def create_layout_list_all(app, lall, db, current_deck):
 	#-----------------------------------------------------------------
 	#				Creating the List all page
 	#------------------------------------------------------------------\
-	global local_current_deck
-
-	local_current_deck = current_deck
-
 	tree = Treeview(lall, show="tree headings", height=34)
 	tree["columns"]=("name", "color", "cost", "number", "type", "decks")
 	tree.column("#0", width=0, stretch=NO)
