@@ -69,11 +69,20 @@
                     "type": "land",
                     "deck": [],
                     "obs": "\n"
+                },
+                "forest": {
+                    "name": "forest",
+                    "color": ",green",
+                    "cost": 0,
+                    "number": 2,
+                    "type": "land",
+                    "deck": [],
+                    "obs": "\n"
                 }
             },
             "desc": "this is a test",
             "n_cards": 5,
-            "n_side": 1
+            "n_side": 3
         }
     },
     "n_cards": 6

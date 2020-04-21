@@ -95,6 +95,7 @@ class Database:
 	def remove_deck(self, name):
 		if(name in self.db["decks"]):
 			self.db["decks"].pop(name)
+		self.update_db()
 
 	#function that adds a card to a deck
 	def add_card_to_deck(self, deck_name, name, num, side=False):
@@ -166,7 +167,7 @@ class Database:
 		for card in self.db["cards"]:
 			if(type == self.db["cards"][card]["type"]):
 				cards.append(self.db["cards"][card])
-
+	
 		return cards
 
 	def search_by_cost(self, cost):

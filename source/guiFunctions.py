@@ -1,6 +1,7 @@
 #python3 module
 from tkinter import *
 from tkinter.ttk import Treeview
+from PIL import Image, ImageTk
 from cards import *
 
 local_current_deck = ""
@@ -12,7 +13,8 @@ def create_layout_list_all(app, lall, db, current_deck):
 	#-----------------------------------------------------------------
 	#				Creating the List all page
 	#------------------------------------------------------------------\
-	tree = Treeview(lall, show="tree headings", height=34)
+	global tree
+	tree = Treeview(lall, show="tree headings", height=32)
 	tree["columns"]=("name", "color", "cost", "number", "type", "decks")
 	tree.column("#0", width=0, stretch=NO)
 	tree.column("name", width=80, stretch=NO)
@@ -28,6 +30,7 @@ def create_layout_list_all(app, lall, db, current_deck):
 	tree.heading("type", text="type")
 	tree.heading("decks", text="decks")
 	tree.grid(row=0, column=0, rowspan=4, padx=30, pady=30)
+
 	b1 = Button(lall, text="Add Card",  bg="lightgrey", width=13, height=5, command=lambda:create_add_card_layout(app, db))
 	b1.grid(row=0, column=2, padx=10)
 	b2 = Button(lall, text="Remove Card", bg="lightgrey", width=13, height=5, command=lambda:remove_card_layout(app, db, tree.item(tree.focus())))
@@ -66,13 +69,13 @@ def create_deck_layout(app, ldeck, db):
 	tree.heading("numberside", text="side")
 	tree.heading("obs", text="comment")
 	tree.grid(row=0, column=0, rowspan=4, padx=30, pady=30)
-	b1 = Button(ldeck, text="Add Deck",  bg="lightgrey", width=13, height=5)
+	b1 = Button(ldeck, text="Add Deck",  bg="lightgrey", width=13, height=5, command=lambda:add_deck_layout(app, db))
 	b1.grid(row=0, column=2, padx=10)
-	b2 = Button(ldeck, text="Remove Deck", bg="lightgrey", width=13, height=5)
+	b2 = Button(ldeck, text="Remove Deck", bg="lightgrey", width=13, height=5, command=lambda:remove_deck_layout(app, db, tree.item(tree.focus())))
 	b2.grid(row=1, column=2, padx=10)
 	b3 = Button(ldeck, text="See Deck", bg="lightgrey", width=13, height=5)
 	b3.grid(row=2, column=2, padx=10)
-	b4 = Button(ldeck, text="Choose Deck", bg="lightgrey", width=13, height=5)
+	b4 = Button(ldeck, text="Choose Deck", bg="lightgrey", width=13, height=5, command=lambda:change_local_deck(tree.item(tree.focus())))
 	b4.grid(row=3, column=2, padx=10)
 
 	decks = db.get_all_decks()
@@ -81,6 +84,13 @@ def create_deck_layout(app, ldeck, db):
 		tree.insert("", END, values=(i["name"], i["n_cards"], i["n_side"], i["desc"]))
 
 	ldeck.tkraise()
+
+def change_local_deck(deck):
+	if deck['values'] != '':
+		global local_current_deck
+		local_current_deck = deck['values'][0]
+	else:
+		messagebox.showinfo("Error", "There is no deck selected")
 
 def create_add_card_layout(app, db):
 	def get_data():
@@ -109,8 +119,7 @@ def create_add_card_layout(app, db):
 
 			add.destroy()
 		except:
-			#need to create a window an error
-			print("there is an error")
+			messagebox.showinfo("Error", "There was an error inserting the card in the database")
 
 	r = IntVar()
 	b = IntVar()
@@ -176,7 +185,6 @@ def create_add_card_layout(app, db):
 def remove_card_layout(app, db, option):
 
 	if(option["values"] == ''):
-		#opens the prompt to ask for the card
 		rem = Toplevel(app)
 		rem.title("Remove card")
 		rem.resizable(0,0)
@@ -195,16 +203,28 @@ def remove_card_layout(app, db, option):
 		b2 = Button(bottom, text="cancel", command=lambda:destroy(rem))
 		b2.pack(side="right")
 	else:
-		#opens prompt to ask if this is to remove
 		rem = Toplevel(app)
+		rem.title("Remove card")
+		rem.resizable(0,0)
+		bottom = Frame(rem)
+		bottom.pack(padx=5, pady=20, side="bottom")
+		lcard = Label(rem, text="Remove card {}".format(option['values'][0]))
+		lcard.pack(padx=5, pady=20)
+		lnumber = Label(rem, text="Number of cards to remove")
+		lnumber.pack(padx=5,pady=20)
+		enum = Entry(rem)
+		enum.pack(padx=5,pady=20)
+		b1 = Button(bottom, text="Remove", command=lambda:remove_card(app, rem, db, option['values'][0], int(enum.get())))
+		b1.pack(side="left")
+		b2 = Button(bottom, text="cancel", command=lambda:destroy(rem))
+		b2.pack(side="right")
 
 def remove_card(app, rem, db, name, number):
 	try:
 		db.remove_card(name, number)
 		rem.destroy()
 	except:
-		#needs a prompt
-		print("erro a remover a carta")
+		messagebox.showinfo("Error", "There was an error removing the card")
 
 def update_card_layout(app, db, option):
 	var = IntVar()
@@ -337,8 +357,7 @@ def add_to_deck_layout(app, db, value):
 			b2 = Button(bottom, text="Cancel", command=lambda:destroy(deck))
 			b2.pack(padx=10,side="right")
 	else:
-		#error message saying that there is no deck selected
-		x=0
+		messagebox.showinfo("Error", "There is no Deck currently selected")
 
 def add_to_deck(db, deck, name, n , var):
 	if(var==0):		
@@ -350,3 +369,126 @@ def add_to_deck(db, deck, name, n , var):
 
 	deck.destroy()
 
+def search_layout(app, db):
+	var = IntVar()
+
+	search = Toplevel(app)
+	search.title('Search card')
+	search.resizable(0,0)
+	bottom = Frame(search)
+	bottom.pack(pady=20, side="bottom")
+	b1 = Button(bottom, text="Search", command=lambda:update_list(search, db, var.get(), lentry.get()))
+	b1.pack(padx=10,side="left")
+	b2 = Button(bottom, text="Cancel", command=lambda:destroy(search))
+	b2.pack(padx=10,side="right")
+	label = Label(search, text="What attribute would you like to search")
+	label.pack(padx=10)
+	radio = Frame(search)
+	radio.pack()
+	main = Radiobutton(radio, text="name", variable=var, value=0)
+	main.pack(pady=10, side="left")
+	side = Radiobutton(radio, text="type", variable=var, value=1)
+	side.pack(side="left")
+	side = Radiobutton(radio, text="cost", variable=var, value=2)
+	side.pack(side="left")
+	label.pack(padx=10)
+	lentry = Entry(search)
+	lentry.pack(padx=10)
+
+def update_list(search, db, var, entry):
+	if var == 0:
+		tree.delete(*tree.get_children())
+		cards = db.search_by_name(entry)
+		for i in cards:
+			decks = ""
+			for j in i["deck"]:
+				if(j):
+					decks = "{}|{}".format(decks, j)
+
+			tree.insert("", END, values=(i["name"], i["color"], i["cost"], i["number"], i["type"], decks))
+	elif var == 1:
+		tree.delete(*tree.get_children())
+		cards = db.search_by_type(entry)
+
+		print(cards)
+
+		for i in cards:
+			decks = ""
+			for j in i["deck"]:
+				if(j):
+					decks = "{}|{}".format(decks, j)
+
+			tree.insert("", END, values=(i["name"], i["color"], i["cost"], i["number"], i["type"], decks))
+	elif var == 2:
+		tree.delete(*tree.get_children())
+		cards = db.search_by_cost(int(entry))
+		for i in cards:
+			decks = ""
+			for j in i["deck"]:
+				if(j):
+					decks = "{}|{}".format(decks, j)
+
+			tree.insert("", END, values=(i["name"], i["color"], i["cost"], i["number"], i["type"], decks))
+	
+
+	search.destroy()
+
+def add_deck_layout(app, db):
+	deck = Toplevel(app)
+	deck.title("Add Deck")
+	deck.resizable(0,0)
+	bottom = Frame(deck)
+	bottom.pack(pady=20, side="bottom")
+	b1 = Button(bottom, text="add", command=lambda:add_deck(deck, db,lentry.get(), e7.get(1.0, END)))
+	b1.pack(padx=10,side="left")
+	b2 = Button(bottom, text="Cancel", command=lambda:destroy(deck))
+	b2.pack(padx=10,side="right")
+	label = Label(deck, text="What name would you like to give the deck" )
+	label.pack(padx = 20)
+	lentry = Entry(deck)
+	lentry.pack(padx=10)
+	label2 = Label(deck, text="Whould you like to git it a comment?" )
+	label2.pack(padx = 20)
+	e7 = Text(deck, height=10, width=30)
+	e7.pack(padx=20, pady=20)
+
+def add_deck(deck, db, name, text):
+	try:
+		db.add_deck(name, text)
+	except:
+		messagebox.showinfo("Error", "Something went wrong")
+	
+	deck.destroy()
+
+def remove_deck_layout(app, db, value):
+	if value['values'] == '':
+		deck = Toplevel(app)
+		deck.title("Add Deck")
+		deck.resizable(0,0)
+		bottom = Frame(deck)
+		bottom.pack(pady=20, side="bottom")
+		b1 = Button(bottom, text="Remove", command=lambda:remove_deck(deck, db,lentry.get()))
+		b1.pack(padx=10,side="left")
+		b2 = Button(bottom, text="Cancel", command=lambda:destroy(deck))
+		b2.pack(padx=10,side="right")
+		label = Label(deck, text="Name of the deck you want to remove" )
+		label.pack(padx = 20)
+		lentry = Entry(deck)
+		lentry.pack(padx=10)
+	else:
+		deck = Toplevel(app)
+		remove_deck(deck, db, value['values'][0])
+
+def remove_deck(deck, db, name):
+	try:
+		db.remove_deck(name)
+	except:
+		messagebox.showinfo("Error", "Something went wrong")
+	
+	deck.destroy()
+
+def see_deck_layout(app, value):
+	if value['values'] != '':
+		x = 0
+	else:
+		messagebox.showinfo("Error", "No deck is selected")
