@@ -180,7 +180,7 @@ class Database:
 	def get_deck(self, deck):
 		for d in self.db["decks"]:
 			if(deck == d):
-				return [d]
+				return self.db["decks"][d]
 		return None
 
 	#General return functions to return everything in the db

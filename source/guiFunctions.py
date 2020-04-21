@@ -1,5 +1,6 @@
 #python3 module
 from tkinter import *
+from tkinter import messagebox
 from tkinter.ttk import Treeview
 from PIL import Image, ImageTk
 from cards import *
@@ -73,7 +74,7 @@ def create_deck_layout(app, ldeck, db):
 	b1.grid(row=0, column=2, padx=10)
 	b2 = Button(ldeck, text="Remove Deck", bg="lightgrey", width=13, height=5, command=lambda:remove_deck_layout(app, db, tree.item(tree.focus())))
 	b2.grid(row=1, column=2, padx=10)
-	b3 = Button(ldeck, text="See Deck", bg="lightgrey", width=13, height=5)
+	b3 = Button(ldeck, text="See Deck", bg="lightgrey", width=13, height=5, command=lambda:see_deck(app, db,  tree.item(tree.focus())))
 	b3.grid(row=2, column=2, padx=10)
 	b4 = Button(ldeck, text="Choose Deck", bg="lightgrey", width=13, height=5, command=lambda:change_local_deck(tree.item(tree.focus())))
 	b4.grid(row=3, column=2, padx=10)
@@ -487,8 +488,29 @@ def remove_deck(deck, db, name):
 	
 	deck.destroy()
 
-def see_deck_layout(app, value):
+def see_deck(app, db,  value):
 	if value['values'] != '':
-		x = 0
+		show = Toplevel(app)
+		tree = Treeview(show, show="tree headings", height=34)
+		tree["columns"]=("name", "color", "cost", "number", "type", "where")
+		tree.column("#0", width=0, stretch=NO)
+		tree.column("name", width=100, stretch=NO)
+		tree.column("color",width=50, stretch=NO)
+		tree.column("cost",width=50, stretch=NO)
+		tree.column("number",width=355, stretch=NO)
+		tree.column("type",width=355, stretch=NO)
+		tree.column("where",width=355, stretch=NO)
+		tree.heading("name", text="name")
+		tree.heading("color", text="cards")
+		tree.heading("cost", text="side")
+		tree.heading("number", text="comment")
+		tree.heading("type", text="cards")
+		tree.heading("where", text="side")
+		tree.pack()
+		deck = db.get_deck(value['values'][0])
+		for j in deck:
+			if(j == 'main' or j=='side'):
+				for i in deck[j]:
+					tree.insert("", END, values=(deck[j][i]["name"], deck[j][i]["color"], deck[j][i]["cost"], deck[j][i]["number"], deck[j][i]["type"], j))
 	else:
 		messagebox.showinfo("Error", "No deck is selected")
