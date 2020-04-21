@@ -37,10 +37,10 @@ class Database:
 				db["cards"][card.name] = {"name": card.name, "color": card.color, "cost": card.cost, "number": int(card.n), "type": card.type, "deck": [card.deck],  "obs": card.obs}
 				db["n_cards"] += int(card.n)
 
+			self.update_db()
+
 			if(card.deck != ''):
 				self.add_card_to_deck(card.name)
-
-			self.update_db()
 		except DataEntering:
 			print("There was an error adding your card")
 
@@ -68,6 +68,13 @@ class Database:
 	def update_card(self, card):
 		if(card["name"] in self.db["cards"]):
 			self.db["cards"][card[name]] = {"name": card["name"], "color": card["color"], "cost": card["cost"], "number": card["number"], "type": card["type"], "deck": card["deck"],  "obs": card["obs"]}
+		
+		for d in self.db["decks"]:
+			if(deck == d):
+				for t in self.db["decks"][d]:
+					if t == 'main' or t == 'side' and card["name"] in self.db["decks"][d][t]:
+						self.db["decks"][d][t][card[name]] = {"name": card["name"], "color": card["color"], "cost": card["cost"], "number": card["number"], "type": card["type"], "deck": card["deck"],  "obs": card["obs"]}
+		
 		self.update_db()
 
 	def update_cost(self, name, cost):

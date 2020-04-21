@@ -226,6 +226,15 @@ def remove_card_layout(app, db, option):
 def remove_card(app, rem, db, name, number):
 	try:
 		db.remove_card(name, number)
+		cards = db.get_all_cards()
+		for i in cards:
+			decks = ""
+			for j in i["deck"]:
+				if(j):
+					decks = "{}|{}".format(decks, j)
+
+			tree.insert("", END, values=(i["name"], i["color"], i["cost"], i["number"], i["type"], decks))
+
 		rem.destroy()
 	except:
 		messagebox.showinfo("Error", "There was an error removing the card")
@@ -467,6 +476,11 @@ def add_deck_layout(app, db):
 def add_deck(deck, db, name, text):
 	try:
 		db.add_deck(name, text)
+
+		tree.delete(*tree.get_children())
+		decks = db.get_all_decks()
+		for i in decks:
+			tree.insert("", END, values=(i["name"], i["n_cards"], i["n_side"], i["desc"]))
 	except:
 		messagebox.showinfo("Error", "Something went wrong")
 	
@@ -494,6 +508,11 @@ def remove_deck_layout(app, db, value):
 def remove_deck(deck, db, name):
 	try:
 		db.remove_deck(name)
+
+		tree.delete(*tree.get_children())
+		decks = db.get_all_decks()
+		for i in decks:
+			tree.insert("", END, values=(i["name"], i["n_cards"], i["n_side"], i["desc"]))
 	except:
 		messagebox.showinfo("Error", "Something went wrong")
 	
