@@ -5,7 +5,7 @@ This is a simple program where you can store all the cards you have. You can als
 ## Ways to use the program
 
 ### Executable file
-Simple run the program and fill it with your cards. It's as simple and straight forward as that
+Simple run the program thats in the Source folder and fill it with your cards. It's as simple and straight forward as that
 
 ### Terminal
 To run the program in the terminal you just have to run the python script console.py that is located inside the source folder
